@@ -17,6 +17,13 @@ import pl.ais.tools.apivisitor.BaseVisitor;
 import pl.ais.tools.apivisitor.visitors.ServiceVisitor;
 import pl.ais.tools.apivisitor.visitors.TypeVisitor;
 
+/**
+ * Eating our own dog's food - making sure, that {@link TypeVisitor} and {@link ServiceVisitor} have
+ * consisting method names.
+ *
+ * Each <em>begin</em> method must have its <em>finish</em> method and vice-versa, each <em>finish</em>
+ * method must have its <em>begin</em> method.
+ */
 @RunWith(Parameterized.class)
 public class VisitorsNamingStrategyTest {
 
