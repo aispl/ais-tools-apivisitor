@@ -138,7 +138,7 @@ public class APIWalker {
      */
     public void visit(Class<?>... classes) {
         for (Class<?> clazz : classes) {
-            if (!terminatingServices.contains(clazz)) {
+            if (clazz != null && !terminatingServices.contains(clazz)) {
                 visitor.beginServiceProcessing(clazz);
                 Arrays.stream(clazz.getDeclaredMethods()).filter(methodAcceptor).forEach(this::visit);
                 visit(clazz.getSuperclass());
