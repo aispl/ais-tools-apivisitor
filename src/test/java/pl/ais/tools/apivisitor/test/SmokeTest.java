@@ -17,6 +17,7 @@ import pl.ais.tools.apivisitor.test.objects.smoke.C;
 import pl.ais.tools.apivisitor.test.objects.smoke.D;
 import pl.ais.tools.apivisitor.test.objects.smoke.E;
 import pl.ais.tools.apivisitor.test.objects.smoke.F;
+import pl.ais.tools.apivisitor.test.objects.smoke.G;
 import pl.ais.tools.apivisitor.test.objects.smoke.Service;
 
 public class SmokeTest {
@@ -36,13 +37,14 @@ public class SmokeTest {
 
         {
             Set<Type> types = visitor.getVisitedTypes();
-            Assert.assertEquals(10, types.size());
+            Assert.assertEquals(11, types.size());
             Assert.assertTrue(types.contains(A.class));
             Assert.assertTrue(types.contains(B.class));
             Assert.assertTrue(types.contains(C.class));
             Assert.assertTrue(types.contains(D.class));
             Assert.assertTrue(types.contains(E.class));
             Assert.assertTrue(types.contains(F.class));
+            Assert.assertTrue(types.contains(G.class));
             Assert.assertTrue(types.contains(List.class));
             Assert.assertTrue(types.contains(void.class));
             Assert.assertTrue(types.stream().anyMatch(type -> type instanceof ParameterizedType));

@@ -16,7 +16,7 @@ public class Service {
 
     }
 
-    public F doF() {
+    public F doF() throws G {
         return null;
     }
 }
