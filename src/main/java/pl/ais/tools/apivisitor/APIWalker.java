@@ -121,11 +121,13 @@ import java.util.function.Predicate;
  *
  * When analyzing types, walker will stop visiting their class (type) hierarchy
  * when one of classes (types) registered as <code>terminatingTypes</code>
- * classes will be reached. By default <code>Object</code> is registered as
- * terminating type so fields available in <code>Object.class</code> will not
+ * classes will be reached. By default <code>java.lang.Object</code>,
+ * <code>java.lang.Exception</code>, <code>java.lang.Throwable</code>
+ * and <code>java.lang.RuntimeException</code> are registered as
+ * terminating types so fields available in those classes will not
  * be visited.
  * This could be used for framework-related super classes.
- * Additional (other then <code>Object.class</code> classes (types) could be
+ * Additional (other then listed above) classes (types) could be
  * configured using {@link #addTerminatingTypes(type...)} method.
  * Terminating types are not reported using visitor's callbacks.
  *
@@ -141,16 +143,16 @@ import java.util.function.Predicate;
  * way as Java's primitive types - they are reported via visitor's callback
  * methods but not analyzed (visiting also stops on them).
  * By default following classes are treat as primitives:
- * <code>java.lang.String.class</code>, <code>java.lang.Byte.class</code>,
- * <code>java.lang.Short.class</code>, <code>java.lang.Integer.class</code>,
- * <code>java.lang.Long.class</code>, <code>java.lang.Double.class</code>,
- * <code>java.lang.Float.class</code>, <code>java.lang.Number.class</code>,
- * <code>java.math,BigDecimal.class</code>, <code>java.math.BigInteger.class</code>,
- * <code>java.util.Calendar.class</code>, <code>java.util.GregorianCalendar.class</code>,
- * <code>java.util.Date.class</code>, <code>java.util.Time.class</code>,
- * <code>java.sql.Time.class</code>, <code>java.sql.Date.class</code>,
- * <code>java.sql.Timestamp.class</code>, <code>java.time.LocalDate.class</code>,
- * <code>java.time.LocalDateTime.class</code>
+ * <code>java.lang.String</code>, <code>java.lang.Byte</code>,
+ * <code>java.lang.Short</code>, <code>java.lang.Integer</code>,
+ * <code>java.lang.Long</code>, <code>java.lang.Double</code>,
+ * <code>java.lang.Float</code>, <code>java.lang.Number</code>,
+ * <code>java.math,BigDecimal</code>, <code>java.math.BigInteger</code>,
+ * <code>java.util.Calendar</code>, <code>java.util.GregorianCalendar</code>,
+ * <code>java.util.Date</code>, <code>java.util.Time</code>,
+ * <code>java.sql.Time</code>, <code>java.sql.Date</code>,
+ * <code>java.sql.Timestamp</code>, <code>java.time.LocalDate</code>,
+ * <code>java.time.LocalDateTime</code>
  * Additional types could be configured using {@link #addPrimitiveTypes(Type...)} method.
  *
  * <em>Implementation note</em>: this class is not thread-safe.
@@ -209,6 +211,7 @@ public class APIWalker {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void visit(Method method) {
         visitor.beginMethodProcessing(method);
         Type returnType = method.getGenericReturnType();
@@ -223,7 +226,7 @@ public class APIWalker {
         }
         for (Class<?> exceptionType : method.getExceptionTypes()) {
             visitor.beginThrowableProcessing(method, (Class<? extends Throwable>) exceptionType);
-            visit(exceptionType);
+            visitTypes(exceptionType);
             visitor.finishThrowableProcessing(method, (Class<? extends Throwable>) exceptionType);
         }
         visitor.finishMethodProcessing(method);
@@ -252,6 +255,9 @@ public class APIWalker {
                             visitor.beginPropertyProcessing(field.getName(), field.getGenericType());
                             visit(path, field.getGenericType());
                             visitor.finishPropertyProcessing(field.getName(), field.getGenericType());
+                        }
+                        if (cType.getSuperclass() != null) {
+                            visit(path, cType.getSuperclass());
                         }
                     }
                 } else {
@@ -300,8 +306,13 @@ public class APIWalker {
     }
 
     private Collection<Type> createTerminatingTypes() {
+        // classes registered here are listed in class documentation
+        // make sure it's up to date
         Set<Type> result = new HashSet<>();
         result.add(Object.class);
+        result.add(Exception.class);
+        result.add(RuntimeException.class);
+        result.add(Throwable.class);
         return result;
     }
 
