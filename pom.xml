@@ -9,7 +9,7 @@
 
     <groupId>pl.ais.tools</groupId>
     <artifactId>ais-tools-apivisitor</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <name>Java Code API Visitor</name>
     <description>
