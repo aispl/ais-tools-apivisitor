@@ -32,8 +32,7 @@ import java.util.function.Predicate;
  * are named <em>types</em>) it calls methods on supplied visitor.
  *
  * Let's assume, we've following service:
- * <pre>
- * {@code
+ * <pre>{@code
  * public class Service {
  *   public A doSomething(B b) {
  *     return new A();
@@ -63,20 +62,17 @@ import java.util.function.Predicate;
  *     return id;
  *   }
  * }
- * </pre>
+ * }</pre>
  *
  * Then we may use <code>APIWalker</code>:
- * <pre>
- * {@code
+ * <pre>{@code
  * public class PrintingVisitor extends BaseVisitor {
  *
- *   @Override
- *   public void beginServiceProcessing(Class<?> clazz) {
+ *   public void beginServiceProcessing(Class&lt;?&gt; clazz) {
  *     log("beginServiceProcessing " + clazz.getSimpleName());
  *   }
  *
- *   @Override
- *   public void finishServiceProcessing(Class<?> clazz) {
+ *   public void finishServiceProcessing(Class&lt;?&gt; clazz) {
  *     log("finishServiceProcessing " + clazz.getSimpleName());
  *   }
  *   ...
@@ -84,7 +80,7 @@ import java.util.function.Predicate;
  * APIWalker walker = new APIWalker();
  * walker.setVisitor(new PrintingVisitor());
  * walker.visit(Service.class);
- * </pre>
+ * }</pre>
  *
  * will produce the following output:
  * <pre>
@@ -128,7 +124,7 @@ import java.util.function.Predicate;
  * be visited.
  * This could be used for framework-related super classes.
  * Additional (other then listed above) classes (types) could be
- * configured using {@link #addTerminatingTypes(type...)} method.
+ * configured using {@link #addTerminatingTypes(Type...)} method.
  * Terminating types are not reported using visitor's callbacks.
  *
  * Please, see {@link Visitor#unsupportedType(java.util.List, Type)} for a list
@@ -186,6 +182,7 @@ public class APIWalker {
      *
      * Iterates through service class methods and visits them.
      *
+		 * @param classes service classes to visit.
      * @throws NullPointerException if there's no visitor.
      */
     public void visit(Class<?>... classes) {
